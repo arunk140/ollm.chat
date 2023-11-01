@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".SettingsActivity">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pixelify_sans"
+        android:padding="10dp"
+        android:text="@string/settings_title"
+        android:textAlignment="center"
+        android:textFontWeight="600"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/apiUrlLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/firacode_bold"
+                android:text="@string/api_url" />
+
+            <EditText
+                android:id="@+id/apiUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:ems="10"
+                android:hint="@string/defaultApiUrl"
+                android:importantForAutofill="no"
+                android:inputType="textUri" />
+
+            <TextView
+                android:id="@+id/modelLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/firacode_bold"
+                android:text="@string/model" />
+
+            <EditText
+                android:id="@+id/model"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:hint="@string/defaultModel"
+                android:importantForAutofill="no"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/apiKeyLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/firacode_bold"
+                android:text="@string/api_key" />
+
+            <EditText
+                android:id="@+id/apiKey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:hint="@string/apiKeyHint"
+                android:importantForAutofill="no"
+                android:inputType="textPassword" />
+
+            <TextView
+                android:id="@+id/temperatureLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/firacode_bold"
+                android:text="@string/temperature" />
+
+            <EditText
+                android:id="@+id/temperature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:hint="@string/defaultTemperature"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:id="@+id/maxTokensLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/firacode_bold"
+                android:text="@string/max_tokens" />
+
+            <EditText
+                android:id="@+id/maxTokens"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:hint="@string/defaultMaxTokens"
+                android:importantForAutofill="no"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/systemPromptLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/firacode_bold"
+                android:text="@string/systemPromptLabel" />
+
+            <EditText
+                android:id="@+id/systemPrompt"
+                android:layout_width="match_parent"
+                android:layout_height="200sp"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

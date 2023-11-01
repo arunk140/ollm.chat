@@ -1,0 +1,61 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Ollmchat" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#393939</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.Ollmchat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="editTextStyle">@style/CustomEditTextStyle</item>
+    </style>
+
+    <style name="Theme.Ollmchat.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Ollmchat.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="CustomTextInput" parent="Widget.AppCompat.EditText">
+        <item name="android:background">#00000000</item>
+    </style>
+    <style name="CustomTabWidget"
+        parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabTextAppearance">@style/CustomTabWidgetText</item>
+        <item name="android:background">#000000</item>
+        <item name="tabIndicatorColor">#AEEA00</item>
+    </style>
+    <style name="CustomTabWidgetText"
+        parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="fontFamily">@font/pixelify_sans</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="CustomText"
+        parent="@android:style/TextAppearance.Material.Small">
+        <item name="fontFamily">@font/pixelify_sans</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="CustomEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">#2D2D2D</item>
+        <item name="android:padding">8dp</item>
+        <item name="fontFamily">@font/firacode_regular</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+    <style name="CustomButtonStyle" parent="@android:style/Widget.Material.Light.Button">
+        <item name="rippleColor">#AEEA00</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@drawable/button_border</item>
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/pixelify_sans</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+</resources>

@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">ollm.chat</string>
+    <string name="tab_text_1">Conversation</string>
+    <string name="tab_text_2">Prompts</string>
+    <string name="settings_button">Settings Button</string>
+    <string name="settings_title">Settings</string>
+    <string name="msgInputHint">Type Here (Enter to Send)</string>
+    <string name="new_prompt_configuration">add prompt</string>
+    <string name="edit_prompt_configuration">edit prompt</string>
+    <string name="defaultApiUrl">https://api.openai.com/</string>
+    <string name="apiKeyHint">sk-......</string>
+    <string name="api_url">API URL</string>
+    <string name="temperature">Temperature</string>
+    <string name="max_tokens">Max Tokens</string>
+    <string name="api_key">API Key</string>
+    <string name="defaultTemperature">0.7</string>
+    <string name="defaultMaxTokens">-1</string>
+    <string name="defaultModel">gpt-3.5-turbo</string>
+    <string name="model">Model</string>
+    <string name="systemPromptLabel">System Prompt</string>
+</resources>
