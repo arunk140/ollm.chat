@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:alpha="0.7"
         android:fontFamily="@font/sourcecode_pro"
-        android:text="No Messages"
+        android:text="@string/no_messages"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/chatList"
@@ -43,6 +43,8 @@
         app:layout_constraintBottom_toTopOf="@+id/editTextText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:clipToPadding="false"
+        android:paddingBottom="35dp"
         tools:itemCount="5"
         tools:listitem="@layout/incoming_bubble" />
 
@@ -83,7 +85,8 @@
         android:src="@drawable/baseline_refresh_24"
         app:layout_constraintBottom_toBottomOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/restart" />
 
     <ImageButton
         android:id="@+id/settingsBtn"
@@ -96,5 +99,41 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_settings_24" />
+
+    <ImageButton
+        android:id="@+id/stopBtn"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:alpha="0.6"
+        android:background="@drawable/roundedbutton"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="5dp"
+        android:src="@drawable/baseline_stop_24"
+        android:text="@string/stop"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/chatList"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/regenBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:alpha="0.7"
+        android:background="@null"
+        android:backgroundTint="#00FFFFFF"
+        android:drawablePadding="0dp"
+        android:includeFontPadding="false"
+        android:paddingHorizontal="0dp"
+        android:paddingVertical="0dp"
+        android:text="@string/regenerate"
+        android:textColor="#D8D8D8"
+        app:iconPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/chatList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

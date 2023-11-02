@@ -25,6 +25,10 @@ public class GPTViewModel extends ViewModel {
     StringBuffer response;
     Handler hn;
     public void loadData(ChatCompletionRequest requestBody, Handler hn, Settings config, Context c) {
+        if (Thread.interrupted()) {
+            hn.post(() -> loadingLiveData.setValue(false));
+            return; // Exit the method if the thread is interrupted
+        }
         hn.post(() -> loadingLiveData.setValue(true));
         hn.post(() -> errorLiveData.setValue(null));
         response = new StringBuffer();
@@ -94,9 +98,22 @@ public class GPTViewModel extends ViewModel {
                     hn.post(() -> dataLiveData.postValue(chatResponse));
                     hn.post(() -> errorLiveData.setValue(null));
                 }
+                if (Thread.interrupted()) {
+                    reader.close();
+                    connection.disconnect();
+                    hn.post(() -> loadingLiveData.setValue(false));
+                    return;
+                }
+            }
+            if (Thread.interrupted()) {
+                reader.close();
+                connection.disconnect();
+                hn.post(() -> loadingLiveData.setValue(false));
+                return;
             }
             reader.close();
             connection.disconnect();
+
         } catch (Exception e) {
             e.printStackTrace();
             hn.post(() -> errorLiveData.setValue(e));

@@ -13,8 +13,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar waitingForLLM;
     ImageButton settingsBtn;
     ImageButton refreshBtn;
+    ImageButton actionBtn;
+    Button regenBtn;
     RecyclerView chatListView;
     LinearLayoutManager linearLayoutManager;
 
@@ -49,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private GPTViewModel viewModel;
     Manager manager;
     Settings settings;
+    Thread currentInvocation;
+
+    Runnable currentRunnable;
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -66,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         settingsBtn = findViewById(R.id.settingsBtn);
         refreshBtn = findViewById(R.id.refreshBtn);
         noMessages = findViewById(R.id.noMessages);
+        actionBtn = findViewById(R.id.stopBtn);
+        regenBtn = findViewById(R.id.regenBtn);
 
         manager = new Manager(this);
         manager.open();
@@ -95,6 +102,21 @@ public class MainActivity extends AppCompatActivity {
         viewModel.loadingLiveData.observe(this, this::setLoaderState);
         viewModel.errorLiveData.observe(this, this::checkErrors);
 
+        actionBtn.setOnClickListener(v -> {
+            if (currentInvocation != null) {
+                currentInvocation.interrupt(); // Interrupt the thread
+            }
+        });
+
+        regenBtn.setOnClickListener(v -> {
+            regenBtn.setVisibility(View.GONE);
+            if (messages.size() > 1) {
+                messages.remove(0);
+                chatAdapter.notifyItemRemoved(0);
+                sendToLLM(messages.get(0).getContent(), false);
+            }
+        });
+
         msgText.setOnKeyListener((v, keyCode, event) -> {
             if (disableSending) {
                 return true;
@@ -107,31 +129,42 @@ public class MainActivity extends AppCompatActivity {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 String inputMsg = msgText.getText().toString().trim();
-                if (inputMsg.equals("")) {
-                    return true;
-                }
-                if (inputMsg.equals("clear")) {
-                    restart();
-                    return true;
-                }
-
-                if (messages.size() == 0 && settings.systemPrompt.length() > 0) {
-                    messages.add(0, new Message("user", inputMsg));
-                    messages.add(1, new Message("system", settings.systemPrompt));
-                    chatAdapter.notifyItemRangeInserted(0,2);
-                } else {
-                    messages.add(0, new Message("user", inputMsg));
-                    chatAdapter.notifyItemInserted(0);
-                }
-
-                msgText.setText("");
-                new Thread(() -> {
-                    ChatCompletionRequest request = new ChatCompletionRequest(reorderMessages(messages), settings, true);
-                    viewModel.loadData(request, mainHandler, settings, getApplicationContext());
-                }).start();
+                sendToLLM(inputMsg, true);
             }
             return true;
         });
+    }
+
+    private void sendToLLM(String inputMsg, boolean addNewMessage) {
+        if (inputMsg.equals("")) {
+            return;
+        }
+        if (inputMsg.equals("clear")) {
+            restart();
+            return;
+        }
+
+        if (addNewMessage) {
+            if (messages.size() == 0 && settings.systemPrompt.length() > 0) {
+                messages.add(0, new Message("user", inputMsg));
+                messages.add(1, new Message("system", settings.systemPrompt));
+                chatAdapter.notifyItemRangeInserted(0,2);
+            } else {
+                messages.add(0, new Message("user", inputMsg));
+                chatAdapter.notifyItemInserted(0);
+            }
+        }
+
+        msgText.setText("");
+        currentRunnable = () -> {
+            if (Thread.interrupted()) {
+                return;
+            }
+            ChatCompletionRequest request = new ChatCompletionRequest(reorderMessages(messages), settings, true);
+            viewModel.loadData(request, mainHandler, settings, getApplicationContext());
+        };
+        currentInvocation = new Thread(currentRunnable);
+        currentInvocation.start();
     }
 
     private void updateTextView(ChatCompletionChunk chunk) {
@@ -161,12 +194,20 @@ public class MainActivity extends AppCompatActivity {
     private void setLoaderState(boolean loaderState) {
         if (loaderState) {
             waitingForLLM.setVisibility(View.VISIBLE);
+            actionBtn.setVisibility(View.VISIBLE);
 //            msgText.setEnabled(false);
             disableSending = true;
+            regenBtn.setVisibility(View.GONE);
         } else {
             waitingForLLM.setVisibility(View.GONE);
+            actionBtn.setVisibility(View.GONE);
 //            msgText.setEnabled(true);
             disableSending = false;
+            if (!Objects.equals(messages.get(0).getRole(), "user")) {
+                regenBtn.setVisibility(View.VISIBLE);
+            } else {
+                regenBtn.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -181,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
     private void restart() {
         disableSending = false;
         waitingForLLM.setVisibility(View.GONE);
+        regenBtn.setVisibility(View.GONE);
         messages.clear();
         chatAdapter.notifyDataSetChanged();
         manager = new Manager(this);
