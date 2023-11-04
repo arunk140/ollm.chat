@@ -2,7 +2,7 @@
 
 ## Connect and Interact with Selhosted LLMs and OpenAI
 
-
+![App Icon](/app/src/main/ic_launcher-playstore.png)
 
 ollm.chat, a minimalistic user interface that connects you to powerful Language Models right from your device. Whether you want to chat with a local Language Model over LAN or connect to OpenAI.
 
