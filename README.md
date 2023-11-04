@@ -2,7 +2,12 @@
 
 ## Connect and Interact with Selhosted LLMs and OpenAI
 
-![App Icon](/app/src/main/ic_launcher-playstore.png)
+![ollm.chat](https://github.com/arunk140/ollm.chat/assets/8670239/a10408d6-1cb3-445b-891c-a5b476b24664)
+
+![Screenshot_1](https://github.com/arunk140/ollm.chat/assets/8670239/3e367f09-a0ec-4be5-9f11-853d97fc45bd)
+![Screenshot_2](https://github.com/arunk140/ollm.chat/assets/8670239/036648e2-ba8a-49d3-8814-0e0674d6753f)
+![Screenshot_3](https://github.com/arunk140/ollm.chat/assets/8670239/87bd9ff2-d353-4fe5-8c9c-766860b9412e)
+
 
 ollm.chat, a minimalistic user interface that connects you to powerful Language Models right from your device. Whether you want to chat with a local Language Model over LAN or connect to OpenAI.
 
