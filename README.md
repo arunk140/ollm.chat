@@ -14,13 +14,6 @@
 
 [Track Project Progress and Changes](https://github.com/users/arunk140/projects/1)
 
-![Screenshot_1](https://github.com/arunk140/ollm.chat/assets/8670239/3e367f09-a0ec-4be5-9f11-853d97fc45bd)
-![Screenshot_2](https://github.com/arunk140/ollm.chat/assets/8670239/036648e2-ba8a-49d3-8814-0e0674d6753f)
-![Screenshot_3](https://github.com/arunk140/ollm.chat/assets/8670239/87bd9ff2-d353-4fe5-8c9c-766860b9412e)
-
-
-
-
 ollm.chat, a minimalistic user interface that connects you to powerful Language Models right from your device. Whether you want to chat with a local Language Model over LAN or connect to OpenAI.
 
 Local Language Model Connectivity: Connect to Local LMs on your LAN network, including LM Studio's Local Server. Harness the power of LMs for your personal or professional needs right at your fingertips.
@@ -31,3 +24,4 @@ Data Privacy: We take your data privacy seriously. ollm.chat stores all your cha
 
 Open Source: ollm.chat is an open-source project available on GitHub. We believe in transparency and community collaboration. You can access the source code, contribute to its development, and even customize the app to suit your specific needs.
 
+![Screenshots](https://github.com/arunk140/ollm.chat/assets/8670239/48d8a602-b1bb-4a3d-9d0e-f2ee5a7eac85)
