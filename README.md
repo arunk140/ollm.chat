@@ -4,9 +4,13 @@
 
 ![ollm.chat](https://github.com/arunk140/ollm.chat/assets/8670239/a10408d6-1cb3-445b-891c-a5b476b24664)
 
+<a href='https://play.google.com/store/apps/details?id=com.arunk140.ollmchat&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+
 ![Screenshot_1](https://github.com/arunk140/ollm.chat/assets/8670239/3e367f09-a0ec-4be5-9f11-853d97fc45bd)
 ![Screenshot_2](https://github.com/arunk140/ollm.chat/assets/8670239/036648e2-ba8a-49d3-8814-0e0674d6753f)
 ![Screenshot_3](https://github.com/arunk140/ollm.chat/assets/8670239/87bd9ff2-d353-4fe5-8c9c-766860b9412e)
+
+
 
 
 ollm.chat, a minimalistic user interface that connects you to powerful Language Models right from your device. Whether you want to chat with a local Language Model over LAN or connect to OpenAI.
