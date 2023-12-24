@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/system"
+        android:checkableBehavior="none"
+        android:menuCategory="system">
+        <item
+            android:id="@+id/nav_home_btn"
+            android:visible="false"
+            android:icon="@drawable/baseline_settings_24"
+            android:title="@string/app_name" />
+        <item
+            android:id="@+id/nav_settings_btn"
+            android:icon="@drawable/baseline_settings_24"
+            android:title="@string/settings_title" />
+        <item
+            android:id="@+id/nav_restart_btn"
+            android:icon="@drawable/baseline_refresh_24"
+            android:title="@string/restart" />
+    </group>
+    <group
+        android:id="@+id/history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" ></group>
+</menu>

@@ -16,18 +16,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".SettingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Ollmchat.NoActionBar" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Ollmchat.NoActionBar">
+            android:theme="@style/Theme.Ollmchat.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Ollmchat.NoActionBar" />
     </application>
 
 </manifest>

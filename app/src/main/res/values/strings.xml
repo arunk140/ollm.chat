@@ -21,10 +21,16 @@
     <string name="regenerate">Regenerate</string>
     <string name="no_messages">No Messages</string>
     <string name="restart">Restart Chat</string>
+    <string name="menu">Menu</string>
     <string name="stop">Stop</string>
     <string name="helpText">Set the API URL to an OpenAI Compatible API Server. If you are using the default OpenAI base URL, you need to set an appropriate API Key from https://platform.openai.com/ and increase the Max Tokens to more than 1. </string>
     <string name="helpText2">Or if you want to use a self-hosted Language Model, download/setup LM Studio on your PC/Server and run the Local Sever, then set the API URL to point to your LM Studio\'s Local Server\'s http://IP:PORT/. No API Key is required for connecting to a local server.</string>
     <string name="helpText3">Visit https://github.com/arunk140/ollm.chat/ for the Source code</string>
     <string name="helpText4">Visit https://github.com/arunk140/ollm.chat/blob/main/HowTo.md for the more detailed Help Instructions</string>
     <string name="helpTextTitle">Setup Instructions</string>
+    <string name="title_activity_nav">NavActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 </resources>

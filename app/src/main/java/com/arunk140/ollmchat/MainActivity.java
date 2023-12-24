@@ -1,240 +1,91 @@
 package com.arunk140.ollmchat;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.view.Menu;
 
-import com.arunk140.ollmchat.Adapter.Chat;
-import com.arunk140.ollmchat.Config.Settings;
-import com.arunk140.ollmchat.DB.Manager;
-import com.arunk140.ollmchat.LLM.ChatCompletionChunk;
-import com.arunk140.ollmchat.LLM.ChatCompletionRequest;
-import com.arunk140.ollmchat.LLM.GPTViewModel;
-import com.arunk140.ollmchat.LLM.Message;
+import com.arunk140.ollmchat.ui.home.HomeFragment;
+import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Objects;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.arunk140.ollmchat.databinding.ActivityNavBinding;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    EditText msgText;
-    TextView noMessages;
-    boolean disableSending;
-    ProgressBar waitingForLLM;
-    ImageButton settingsBtn;
-    ImageButton refreshBtn;
-    ImageButton actionBtn;
-    Button regenBtn;
-    RecyclerView chatListView;
-    LinearLayoutManager linearLayoutManager;
 
-    ArrayList<Message> messages;
-    Chat chatAdapter;
-    private Handler mainHandler;
-
-    private GPTViewModel viewModel;
-    Manager manager;
-    Settings settings;
-    Thread currentInvocation;
-
-    Runnable currentRunnable;
-
-
-    @SuppressLint("NotifyDataSetChanged")
+    private AppBarConfiguration mAppBarConfiguration;
+    private ActivityNavBinding binding;
+    DrawerLayout drawer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        disableSending = false;
-        messages = new ArrayList<>();
-        chatAdapter = new Chat(messages);
 
-        waitingForLLM = findViewById(R.id.waitingForLLM);
-        chatListView = findViewById(R.id.chatList);
-        msgText = findViewById(R.id.editTextText);
-        settingsBtn = findViewById(R.id.settingsBtn);
-        refreshBtn = findViewById(R.id.refreshBtn);
-        noMessages = findViewById(R.id.noMessages);
-        actionBtn = findViewById(R.id.stopBtn);
-        regenBtn = findViewById(R.id.regenBtn);
+        binding = ActivityNavBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        manager = new Manager(this);
-        manager.open();
-        settings = manager.getSettings();
-        manager.close();
+        drawer = binding.drawerLayout;
+        NavigationView navigationView = binding.navView;
+        mAppBarConfiguration = new AppBarConfiguration.Builder()
+                .setOpenableLayout(drawer)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_nav);
+        NavigationUI.setupWithNavController(navigationView, navController);
 
-        settingsBtn.setOnClickListener(v -> {
-            Intent myIntent = new Intent(MainActivity.this, SettingsActivity.class);
-            MainActivity.this.startActivity(myIntent);
-        });
+        navigationView.setNavigationItemSelectedListener(
+                item -> {
+                    if (item.getItemId() == R.id.nav_settings_btn) {
+                        Intent settings = new Intent(this, SettingsActivity.class);
+                        MainActivity.this.startActivity(settings);
+                    } else if (item.getItemId() == R.id.nav_restart_btn) {
+                        drawer.closeDrawer(GravityCompat.START);
+                        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_nav);
+                        if (navHostFragment != null) {
+                            List<Fragment> x = navHostFragment.getChildFragmentManager().getFragments();
+                            for (int i = 0; i < x.size(); i++) {
+                                try {
+                                    HomeFragment z = (HomeFragment) x.get(i);
+                                    z.restart();
+                                } catch (Exception ignored) {
 
-        refreshBtn.setOnClickListener(v -> {
-            restart();
-        });
+                                }
+                            }
+                        }
 
-        DividerItemDecoration dId = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
-        dId.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getApplicationContext(), R.drawable.spacer)));
-        chatListView.addItemDecoration(dId);
-
-        chatListView.setAdapter(chatAdapter);
-        linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, true);
-        chatListView.setLayoutManager(linearLayoutManager);
-
-        mainHandler = new Handler(Looper.getMainLooper());
-        viewModel = new ViewModelProvider(this).get(GPTViewModel.class);
-        viewModel.dataLiveData.observe(this, this::updateTextView);
-        viewModel.loadingLiveData.observe(this, this::setLoaderState);
-        viewModel.errorLiveData.observe(this, this::checkErrors);
-
-        actionBtn.setOnClickListener(v -> {
-            if (currentInvocation != null) {
-                currentInvocation.interrupt(); // Interrupt the thread
-            }
-        });
-
-        regenBtn.setOnClickListener(v -> {
-            regenBtn.setVisibility(View.GONE);
-            if (messages.size() > 1) {
-                messages.remove(0);
-                chatAdapter.notifyItemRemoved(0);
-                sendToLLM(messages.get(0).getContent(), false);
-            }
-        });
-
-        msgText.setOnKeyListener((v, keyCode, event) -> {
-            if (disableSending) {
-                return true;
-            }
-            if (messages.size() > 0) {
-                noMessages.setVisibility(View.GONE);
-            } else {
-                noMessages.setVisibility(View.VISIBLE);
-            }
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                String inputMsg = msgText.getText().toString().trim();
-                sendToLLM(inputMsg, true);
-            }
-            return true;
-        });
-    }
-
-    private void sendToLLM(String inputMsg, boolean addNewMessage) {
-        if (inputMsg.equals("")) {
-            return;
-        }
-        if (inputMsg.equals("clear")) {
-            restart();
-            return;
-        }
-
-        if (addNewMessage) {
-            if (messages.size() == 0 && settings.systemPrompt.length() > 0) {
-                messages.add(0, new Message("user", inputMsg));
-                messages.add(1, new Message("system", settings.systemPrompt));
-                chatAdapter.notifyItemRangeInserted(0,2);
-            } else {
-                messages.add(0, new Message("user", inputMsg));
-                chatAdapter.notifyItemInserted(0);
-            }
-        }
-
-        msgText.setText("");
-        currentRunnable = () -> {
-            if (Thread.interrupted()) {
-                return;
-            }
-            ChatCompletionRequest request = new ChatCompletionRequest(reorderMessages(messages), settings, true);
-            viewModel.loadData(request, mainHandler, settings, getApplicationContext());
-        };
-        currentInvocation = new Thread(currentRunnable);
-        currentInvocation.start();
-    }
-
-    private void updateTextView(ChatCompletionChunk chunk) {
-        if (messages.size() > 0 && chunk.getChoices().size() > 0) {
-            if (chunk.getChoices().get(0).getDelta().getContent() == null) {
-                return;
-            }
-            String role = "assistant";
-            String content = chunk.getChoices().get(0).getDelta().getContent();
-
-            boolean isSameRole = Objects.equals(messages.get(0).getRole(), role);
-            if (isSameRole) {
-                messages.get(0).appendDelta(content);
-                chatAdapter.notifyItemChanged(0);
-            } else {
-                messages.add(0, new Message(role, content));
-                chatAdapter.notifyItemInserted(0);
-            }
-            chatListView.scrollToPosition(0);
-        }
-    }
-    public ArrayList<Message> reorderMessages(ArrayList<Message> messages) {
-        ArrayList<Message> x = (ArrayList<Message>) messages.clone();
-        Collections.reverse(x);
-        return x;
-    }
-    private void setLoaderState(boolean loaderState) {
-        if (loaderState) {
-            waitingForLLM.setVisibility(View.VISIBLE);
-            actionBtn.setVisibility(View.VISIBLE);
-//            msgText.setEnabled(false);
-            disableSending = true;
-            regenBtn.setVisibility(View.GONE);
-        } else {
-            waitingForLLM.setVisibility(View.GONE);
-            actionBtn.setVisibility(View.GONE);
-//            msgText.setEnabled(true);
-            disableSending = false;
-            if (!Objects.equals(messages.get(0).getRole(), "user")) {
-                regenBtn.setVisibility(View.VISIBLE);
-            } else {
-                regenBtn.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    private void checkErrors(Exception e) {
-        if (e != null) {
-            messages.add(0, new Message("error", e.getMessage()));
-            chatAdapter.notifyItemInserted(0);
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void restart() {
-        disableSending = false;
-        waitingForLLM.setVisibility(View.GONE);
-        regenBtn.setVisibility(View.GONE);
-        messages.clear();
-        chatAdapter.notifyDataSetChanged();
-        manager = new Manager(this);
-        manager.open();
-        settings = manager.getSettings();
-        manager.close();
-        noMessages.setVisibility(View.VISIBLE);
+                    }
+                    return false;
+                }
+        );
     }
 
     @Override
-    protected void onResume() {
-        restart();
-        super.onResume();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.nav, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_nav);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
+
+    public void toggleDrawer() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            drawer.openDrawer(GravityCompat.START);
+        }
     }
 }
