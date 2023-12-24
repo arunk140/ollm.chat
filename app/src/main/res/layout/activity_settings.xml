@@ -134,6 +134,51 @@
                 android:gravity="start|top"
                 android:inputType="textMultiLine" />
 
+            <TextView
+                android:id="@+id/helpTextTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/firacode_bold"
+                android:text="@string/helpTextTitle"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/helpText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:textColorLink="@android:color/white"
+                android:fontFamily="@font/firacode_regular"
+                android:text="@string/helpText" />
+
+            <TextView
+                android:id="@+id/helpText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/firacode_regular"
+                android:text="@string/helpText2" />
+
+
+            <TextView
+                android:id="@+id/helpText3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:textColorLink="@android:color/white"
+                android:fontFamily="@font/firacode_regular"
+                android:text="@string/helpText3" />
+
+
+            <TextView
+                android:id="@+id/helpText4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:textColorLink="@android:color/white"
+                android:fontFamily="@font/firacode_regular"
+                android:text="@string/helpText4" />
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
